@@ -20,16 +20,16 @@ const ChatMessage: React.FC<ChatMessageProps> = ({ content, isUser, timestamp })
       className={`mb-4 flex ${isUser ? 'justify-end' : 'justify-start'}`}
     >
       <div
-        className={`relative max-w-[80%] px-4 py-2 rounded-2xl 
+        className={`relative max-w-[80%] px-6 py-3 rounded-2xl 
           ${isUser 
-            ? 'rounded-tr-none bg-indigo-500/40 backdrop-blur-md' 
-            : 'rounded-tl-none bg-gray-400/40 backdrop-blur-md'
+            ? 'bg-gray-800/80 backdrop-blur-md rounded-tr-none' 
+            : 'bg-gray-700/80 backdrop-blur-md rounded-tl-none'
           }
-          shadow-xl text-white`}
+          shadow-lg text-gray-100`}
       >
         <div className="relative z-10">{content}</div>
         {timestamp && (
-          <div className="text-xs opacity-70 text-right mt-1">{timestamp}</div>
+          <div className="text-xs text-gray-400 text-right mt-1">{timestamp}</div>
         )}
       </div>
     </motion.div>

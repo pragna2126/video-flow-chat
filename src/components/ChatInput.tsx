@@ -23,27 +23,28 @@ const ChatInput: React.FC<ChatInputProps> = ({ onSendMessage, disabled }) => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3 }}
-      className="py-4 px-2"
+      className="py-4 px-4"
     >
-      <form onSubmit={handleSubmit} className="flex">
+      <form onSubmit={handleSubmit} className="flex gap-2">
         <input
           type="text"
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           disabled={disabled}
-          placeholder="Type your message..."
-          className="flex-1 px-4 py-2 rounded-full bg-white/10 backdrop-blur-md 
-                    border border-white/20 text-white placeholder-white/50
-                    focus:outline-none focus:ring-2 focus:ring-white/30"
+          placeholder="Ask anything..."
+          className="flex-1 px-4 py-3 rounded-full bg-gray-800/80 backdrop-blur-md 
+                    border border-gray-700/50 text-white placeholder-gray-400
+                    focus:outline-none focus:ring-2 focus:ring-gray-600"
         />
         <motion.button
           whileHover={{ scale: 1.05 }}
           whileTap={{ scale: 0.95 }}
           type="submit"
           disabled={disabled || !message.trim()}
-          className="ml-2 px-4 py-2 rounded-full bg-indigo-500/80 text-white 
-                  backdrop-blur-md hover:bg-indigo-600/80 transition-colors
-                  disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-6 py-3 rounded-full bg-gray-800/80 text-white 
+                    backdrop-blur-md hover:bg-gray-700/80 transition-colors
+                    disabled:opacity-50 disabled:cursor-not-allowed
+                    border border-gray-700/50"
         >
           Send
         </motion.button>
