@@ -12,13 +12,6 @@ const Index = () => {
         </h1>
         <ChatUI />
       </div>
-      <div className="fixed bottom-4 right-4 z-20">
-        <iframe 
-          src="https://interfaces.zapier.com/embed/chatbot/cm9tzmuxm005b12klbedxuo3o"
-          allow="clipboard-write"
-          className="w-96 h-[600px] rounded-lg shadow-xl"
-        ></iframe>
-      </div>
     </div>
   );
 };
