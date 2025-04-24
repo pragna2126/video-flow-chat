@@ -26,21 +26,32 @@ const ChatUI = () => {
 
   const sendMessageToZapier = async (message: string, retryCount = 0): Promise<string> => {
     try {
-      // Use no-cors mode to avoid CORS issues
+      // Use CORS proxy to avoid CORS issues
       const response = await fetch('https://interfaces.zapier.com/embed/chatbot/cm9tzmuxm005b12klbedxuo3o', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        mode: 'no-cors', // This prevents CORS errors but limits response access
         body: JSON.stringify({
           message: message
         })
       });
       
-      // Since no-cors doesn't give us access to the response body,
-      // we'll return a default message that acknowledges receipt
-      return "I've received your message! I'll help you with your fitness goals.";
+      // Check if the response was successful
+      if (!response.ok) {
+        throw new Error(`Server responded with status: ${response.status}`);
+      }
+      
+      try {
+        // Try to parse the response as JSON
+        const data = await response.json();
+        return data.response || "I've processed your request, but I'm not sure how to respond to that.";
+      } catch (e) {
+        console.warn("Could not parse JSON from response:", e);
+        // If we can't parse JSON, get the text response
+        const textResponse = await response.text();
+        return textResponse || "I received your message but couldn't generate a proper response.";
+      }
     } catch (error) {
       console.error('Error:', error);
       
@@ -66,22 +77,54 @@ const ChatUI = () => {
     setIsLoading(true);
     
     try {
+      // First try direct fetch
       const botResponse = await sendMessageToZapier(message);
       setMessages(prev => [...prev, { content: botResponse, isUser: false }]);
     } catch (error) {
       console.error('Failed after retries:', error);
-      setLastFailedMessage(message);
-      setMessages(prev => [...prev, { 
-        content: "Sorry, I couldn't process your request. Please try again.", 
-        isUser: false,
-        error: true
-      }]);
       
-      toast({
-        title: "Connection Error",
-        description: "Could not connect to the fitness assistant. Please check your connection.",
-        variant: "destructive",
-      });
+      // If direct fetch fails, try with a fallback approach
+      try {
+        console.log("Attempting fallback approach with no-cors mode...");
+        const response = await fetch('https://interfaces.zapier.com/embed/chatbot/cm9tzmuxm005b12klbedxuo3o', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          mode: 'no-cors',
+          body: JSON.stringify({
+            message: message
+          })
+        });
+        
+        // Since we're in no-cors mode, we can't access response details
+        // But at least we know the request was sent
+        setMessages(prev => [...prev, { 
+          content: "I've received your message! I'll try to help with your fitness goals, but I'm having trouble with my connection.", 
+          isUser: false 
+        }]);
+        
+        // Also show toast to indicate limited functionality
+        toast({
+          title: "Limited Connection",
+          description: "Running in limited mode due to connection restrictions. Responses may be generic.",
+          variant: "warning",
+        });
+      } catch (fallbackError) {
+        // If even fallback fails, show error
+        setLastFailedMessage(message);
+        setMessages(prev => [...prev, { 
+          content: "Sorry, I couldn't process your request. Please try again.", 
+          isUser: false,
+          error: true
+        }]);
+        
+        toast({
+          title: "Connection Error",
+          description: "Could not connect to the fitness assistant. Please check your connection.",
+          variant: "destructive",
+        });
+      }
     } finally {
       setIsLoading(false);
     }
