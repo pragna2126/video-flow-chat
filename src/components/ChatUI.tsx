@@ -7,7 +7,7 @@ import { AlertCircle } from "lucide-react";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 
 const ChatUI = () => {
-  const [messages, setMessages] = useState<Array<{ content: string; isUser: boolean; error?: boolean }>>([
+  const [messages, setMessages] = useState<Array<{ content: string | React.ReactNode; isUser: boolean; error?: boolean }>>([
     { content: "Hi there! How can I help you with your fitness journey today?", isUser: false }
   ]);
   const [inputMessage, setInputMessage] = useState("");

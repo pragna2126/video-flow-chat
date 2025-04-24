@@ -1,8 +1,9 @@
 
 import { motion } from "framer-motion";
+import React from "react";
 
 export interface ChatMessageProps {
-  content: string;
+  content: string | React.ReactNode;
   isUser: boolean;
   timestamp?: string;
 }
