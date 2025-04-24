@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { useToast } from "@/hooks/use-toast";
@@ -108,7 +107,7 @@ const ChatUI = () => {
         toast({
           title: "Limited Connection",
           description: "Running in limited mode due to connection restrictions. Responses may be generic.",
-          variant: "warning",
+          variant: "default",
         });
       } catch (fallbackError) {
         // If even fallback fails, show error
